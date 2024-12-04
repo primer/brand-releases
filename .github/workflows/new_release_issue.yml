@@ -40,3 +40,4 @@ jobs:
           release_body: ${{ steps.get_latest_release.outputs.release_body }}
         with:
           update_existing: true
+          search_existing: true
