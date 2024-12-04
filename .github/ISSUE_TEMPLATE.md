@@ -1,5 +1,5 @@
 ---
-title: New release available: "{{ env.release_name }}"
+title: New release available "{{ env.release_name }}"
 labels: release
 ---
 
