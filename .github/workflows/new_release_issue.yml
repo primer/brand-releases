@@ -64,5 +64,5 @@ jobs:
               title: `New release available: ${releaseName}`,
               body: `A new release is available. Check it out [here](${releaseUrl}).\n\n## Release Notes\n${releaseBody}`,
               labels: ['release']
-            })
+            });
             console.log('Issue created.');
