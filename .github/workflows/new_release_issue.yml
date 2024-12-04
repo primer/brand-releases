@@ -57,3 +57,5 @@ jobs:
           release_name: ${{ steps.get_latest_release.outputs.release_name }}
           release_url: ${{ steps.get_latest_release.outputs.release_url }}
           release_body: ${{ steps.get_latest_release.outputs.release_body }}
+        with:
+          update_existing: true
