@@ -54,7 +54,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          filename: .github/ISSUE_TEMPLATE/release_issue_template.md
           content: |
             release_name: ${{ steps.get_latest_release.outputs.release_name }}
             release_url: ${{ steps.get_latest_release.outputs.release_url }}
