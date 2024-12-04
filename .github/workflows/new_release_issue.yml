@@ -51,12 +51,11 @@ jobs:
       - name: Create new release issue
         if: success()
         uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: New release available: ${{ steps.get_latest_release.outputs.release_name }}
-          body: |
-            A new release is available. Check it out [here](${{ steps.get_latest_release.outputs.release_url }}).
-
-            ## Release Notes
-            ${{ steps.get_latest_release.outputs.release_body }}
-          labels: release
+          filename: .github/ISSUE_TEMPLATE/release_issue_template.md
+          content: |
+            release_name: ${{ steps.get_latest_release.outputs.release_name }}
+            release_url: ${{ steps.get_latest_release.outputs.release_url }}
+            release_body: ${{ steps.get_latest_release.outputs.release_body }}
