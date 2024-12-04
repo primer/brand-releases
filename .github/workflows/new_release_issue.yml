@@ -50,19 +50,13 @@ jobs:
 
       - name: Create new release issue
         if: success()
-        uses: actions/github-script@v7
+        uses: JasonEtco/create-an-issue@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const releaseName = '${{ steps.get_latest_release.outputs.release_name }}';
-            const releaseUrl = '${{ steps.get_latest_release.outputs.release_url }}';
-            const releaseBody = `${{ steps.get_latest_release.outputs.release_body }}`;
-            console.log('Creating issue with:', { releaseName, releaseUrl, releaseBody });
-            github.rest.issues.create({
-              owner: 'primer',
-              repo: 'brand-releases',
-              title: `New release available: ${releaseName}`,
-              body: `A new release is available. Check it out [here](${releaseUrl}).\n\n## Release Notes\n${releaseBody}`,
-              labels: ['release']
-            });
-            console.log('Issue created.');
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: New release available: ${{ steps.get_latest_release.outputs.release_name }}
+          body: |
+            A new release is available. Check it out [here](${{ steps.get_latest_release.outputs.release_url }}).
+
+            ## Release Notes
+            ${{ steps.get_latest_release.outputs.release_body }}
+          labels: release
