@@ -23,6 +23,7 @@ jobs:
             if (!latestRelease) {
               core.setFailed('No @primer/react-brand release found.');
             } else {
+              console.log('Latest release:', latestRelease);
               core.setOutput('release_name', latestRelease.name);
               core.setOutput('release_url', latestRelease.html_url);
               core.setOutput('release_body', latestRelease.body);
@@ -34,14 +35,17 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: issues } = await github.issues.listForRepo({
+            const { data: issues } = await github.rest.issues.listForRepo({
               owner: 'primer',
               repo: 'brand-releases',
               labels: 'release'
             });
+
             const issueExists = issues.some(issue => issue.title.includes('${{ steps.get_latest_release.outputs.release_name }}'));
             if (issueExists) {
               core.setFailed('An issue for this release already exists.');
+            } else {
+              console.log('No existing issue found.');
             }
 
       - name: Create new release issue
@@ -53,10 +57,12 @@ jobs:
             const releaseName = '${{ steps.get_latest_release.outputs.release_name }}';
             const releaseUrl = '${{ steps.get_latest_release.outputs.release_url }}';
             const releaseBody = '${{ steps.get_latest_release.outputs.release_body }}';
-            github.issues.create({
+            console.log('Creating issue with:', { releaseName, releaseUrl, releaseBody });
+            github.rest.issues.create({
               owner: 'primer',
               repo: 'brand-releases',
               title: `New release available: ${releaseName}`,
               body: `A new release is available. Check it out [here](${releaseUrl}).\n\n## Release Notes\n${releaseBody}`,
               labels: ['release']
             })
+            console.log('Issue created.');
