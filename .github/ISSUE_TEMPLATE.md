@@ -1,9 +1,9 @@
 ---
-title: New release available: {{ env.release_name }}
+title: New release available: "{{ env.release_name }}"
 labels: release
 ---
 
-A new release is available. Check it out [here]({{ env.release_url }}).
+A new release is available: {{ env.release_url }}.
 
 ## Release Notes
 
