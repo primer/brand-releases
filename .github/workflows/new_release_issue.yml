@@ -54,8 +54,6 @@ jobs:
         uses: JasonEtco/create-an-issue@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          content: |
-            release_name: ${{ steps.get_latest_release.outputs.release_name }}
-            release_url: ${{ steps.get_latest_release.outputs.release_url }}
-            release_body: ${{ steps.get_latest_release.outputs.release_body }}
+          release_name: ${{ steps.get_latest_release.outputs.release_name }}
+          release_url: ${{ steps.get_latest_release.outputs.release_url }}
+          release_body: ${{ steps.get_latest_release.outputs.release_body }}
