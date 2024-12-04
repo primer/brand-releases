@@ -30,25 +30,6 @@ jobs:
               core.setOutput('release_body', latestRelease.body);
             }
 
-      - name: Check for existing issue
-        id: check_existing_issue
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data: issues } = await github.rest.issues.listForRepo({
-              owner: 'primer',
-              repo: 'brand-releases',
-              labels: 'release'
-            });
-
-            const issueExists = issues.some(issue => issue.title.includes('${{ steps.get_latest_release.outputs.release_name }}'));
-            if (issueExists) {
-              core.setFailed('An issue for this release already exists.');
-            } else {
-              console.log('No existing issue found.');
-            }
-
       - name: Create new release issue
         if: success()
         uses: JasonEtco/create-an-issue@v2
