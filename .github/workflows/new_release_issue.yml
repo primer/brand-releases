@@ -1,0 +1,51 @@
+name: Create new release issue
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  create-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify release availability
+        id: check_release
+        run: |
+          if [[ "${{ github.event.release.name }}" != *"@primer/react-brand"* ]]; then
+            echo "This release does not contain @primer/react-brand. Exiting."
+            exit 1
+          fi
+          echo "RELEASE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Check for existing issue
+        id: check_existing_issue
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: issues } = await github.issues.listForRepo({
+              owner: 'primer',
+              repo: 'brand-releases',
+              labels: 'release'
+            });
+            const releaseTag = process.env.RELEASE_TAG;
+            const issueExists = issues.some(issue => issue.title.includes(releaseTag));
+            if (issueExists) {
+              core.setFailed(`An issue for release ${releaseTag} already exists.`);
+            }
+
+      - name: Create new release issue
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releaseTag = process.env.RELEASE_TAG;
+            github.issues.create({
+              owner: 'primer',
+              repo: 'brand-releases',
+              title: `New release available: ${releaseTag}`,
+              body: `A new release is available. Check it out [here](https://github.com/primer/brand/releases/tag/${releaseTag}).`,
+              labels: ['release']
+            })
