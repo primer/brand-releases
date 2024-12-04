@@ -56,7 +56,7 @@ jobs:
           script: |
             const releaseName = '${{ steps.get_latest_release.outputs.release_name }}';
             const releaseUrl = '${{ steps.get_latest_release.outputs.release_url }}';
-            const releaseBody = '${{ steps.get_latest_release.outputs.release_body }}';
+            const releaseBody = `${{ steps.get_latest_release.outputs.release_body }}`;
             console.log('Creating issue with:', { releaseName, releaseUrl, releaseBody });
             github.rest.issues.create({
               owner: 'primer',
