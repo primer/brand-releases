@@ -2,7 +2,8 @@
 
 <h1 align="center">Primer Brand - Release Updates</h1>
 
-<p align="center"><strong>Automation that batches release information in GitHub issues.</strong></p>
+<p align="center"><strong>Automation that batches release information in GitHub issues.</p>
+<p align="center"><a href="https://github.com/primer/brand-releases/issues">👉 Start here</a></strong></p>
 
 > [!NOTE]
 > Intended for GitHub Staff only.
@@ -14,8 +15,6 @@
   - Changelog
   - Upgrade checklist
   - Previous smoke test results
-
-👉 [Start here](https://github.com/primer/brand-releases/issues)
 
 ## Need support?
 
