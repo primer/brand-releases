@@ -58,6 +58,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const crypto = require('crypto');
+
             const prs = await github.rest.pulls.list({
               owner: "primer",
               repo: "brand",
@@ -83,18 +85,31 @@ jobs:
                   comment.user.login !== "github-actions[bot]" &&
                   comment.user.login !== "changeset-bot[bot]"
               );
-              console.log('Filtered comments:', filteredComments);
 
-              // post comments to issue
+              // Get existing comments in the issue
               const issue_number = ${{ steps.created-issue.outputs.number }};
-              console.log('Posting comments to issue number:', issue_number);
+              const issueComments = await github.rest.issues.listComments({
+                owner: 'primer',
+                repo: 'brand-releases',
+                issue_number: issue_number,
+              });
+
+              // Create a set of hashes of existing comments
+              const existingCommentHashes = new Set(issueComments.data.map(issueComment => 
+                crypto.createHash('sha256').update(issueComment.body).digest('hex')
+              ));
+
+              // Post comments to issue if not already present
+              
               for (const comment of filteredComments) {
-                
-                await github.rest.issues.createComment({
-                  owner: 'primer',
-                  repo: 'brand-releases',
-                  issue_number: issue_number,
-                  body: comment.body
-                });
+                const commentHash = crypto.createHash('sha256').update(comment.body).digest('hex');
+                if (!existingCommentHashes.has(commentHash)) {
+                  await github.rest.issues.createComment({
+                    owner: 'primer',
+                    repo: 'brand-releases',
+                    issue_number: issue_number,
+                    body: comment.body
+                  });
+                }
               }
             }
