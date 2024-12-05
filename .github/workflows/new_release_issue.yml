@@ -1,6 +1,8 @@
 name: Create new release issue
 
 on:
+  schedule:
+    - cron: "0 */6 * * *" # every 6 hours - this is a workaround for missing repository_dispatch events
   workflow_dispatch:
   repository_dispatch:
     types: [new-release-created]
@@ -86,7 +88,7 @@ jobs:
                   comment.user.login !== "changeset-bot[bot]"
               );
 
-              // Get existing comments in the issue
+              // Existing comments
               const issue_number = ${{ steps.created-issue.outputs.number }};
               const issueComments = await github.rest.issues.listComments({
                 owner: 'primer',
@@ -94,13 +96,12 @@ jobs:
                 issue_number: issue_number,
               });
 
-              // Create a set of hashes of existing comments
+              // Hash existing comments
               const existingCommentHashes = new Set(issueComments.data.map(issueComment => 
                 crypto.createHash('sha256').update(issueComment.body).digest('hex')
               ));
 
-              // Post comments to issue if not already present
-              
+              // Post deduped comments
               for (const comment of filteredComments) {
                 const commentHash = crypto.createHash('sha256').update(comment.body).digest('hex');
                 if (!existingCommentHashes.has(commentHash)) {
