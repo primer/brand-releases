@@ -20,15 +20,15 @@ Please ensure these items are checked before merging.
   - [ ] Install release `{{ env.release_name }}`
   - [ ] Verify CI passes
 - [ ] Manually verify regressions on following pages against production:
-- `/features/copilot`
-- `/enterprise`
-- `/enterprise/advanced-security`
-- `/articles/security`
-- `/articles/security/what-is-security-testing`
-- `/features/preview`
-- `/features/copilot/getting-started` and `/features/copilot`
-- `/solutions/devops`
-- `/education`
-- `/mobile`
-- `/contact-sales`
 - `/about/diversity`
+- `/contact-sales`
+- `/education`
+- `/enterprise/advanced-security`
+- `/enterprise`
+- `/features/copilot/getting-started`
+- `/features/copilot`
+- `/features/preview`
+- `/mobile`
+- `/resources/articles/security/what-is-application-security`
+- `/resources/articles/security`
+- `/solutions/devops`
