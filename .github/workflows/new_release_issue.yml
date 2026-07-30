@@ -114,3 +114,13 @@ jobs:
                 }
               }
             }
+
+      - name: Assign Copilot to perform integration work
+        if: success()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh agent-task create \
+            -R github/github-ui \
+            "Upgrade @primer/react-brand to ${{ steps.get_latest_release.outputs.release_name }}. Release details: ${{ steps.get_latest_release.outputs.release_url }}. Related issue: https://github.com/primer/brand-releases/issues/${{ steps.created-issue.outputs.number }}"
